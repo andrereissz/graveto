@@ -1,0 +1,37 @@
+body, html {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+
+.btn-graveto{
+    background-color: #f8e89b !important;
+    color: #332913 !important;
+}
+
+.card-body{
+    background-color: #FFF3D3 !important;
+    border-radius:2%;
+}
+
+.card-header{
+    background-color: #bc9e5d !important;;
+}
+
+.num{
+    width: 60px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    padding: 0 0 0 5px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
