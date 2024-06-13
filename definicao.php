@@ -28,9 +28,25 @@ $rest = $_POST["rest"];
                 </div>
                 <div class="card-body">
                     <form action="teste.php" method="POST">
-                        <input type="hidden" name="var" value="<?php echo($_POST["var"]) ?>">
-                        <input type="hidden" name="rest" value="<?php echo($_POST["rest"]) ?>">
+                        <input type="hidden" name="var" value="<?php echo ($_POST["var"]) ?>">
+                        <input type="hidden" name="rest" value="<?php echo ($_POST["rest"]) ?>">
+
+                        <!-- Corpo do card -->
                         <div class="col col-auto">
+
+                            <!-- Primeira linha ( definir se é maximização ou minimização ) -->
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <input type="radio" class="btn-check" name="options" id="option1" value="0" autocomplete="off" checked>
+                                    <label class="btn btn-outline-warning btn-sm" for="option1">Maximizar</label>
+                                </div>
+                                <div class="col">
+                                    <input type="radio" class="btn-check" name="options" id="option2" value="1" autocomplete="off">
+                                    <label class=" btn btn-outline-warning btn-sm" for="option2">Minimizar</label>
+                                </div>
+                            </div>
+
+                            <!-- Segunda linha ( exibir variáveis ) -->
                             <div class="row">
                                 <div style="width: 84px; height: 40px"></div>
                                 <?php
@@ -45,6 +61,8 @@ $rest = $_POST["rest"];
                                 }
                                 ?>
                             </div>
+
+                            <!-- Terceira linha ( definir a Z e mostrar identificadores de colunas ) -->
                             <div class="row row-auto">
                                 <div style="width: 84px;">
                                     <p>Z</p>
@@ -71,32 +89,37 @@ $rest = $_POST["rest"];
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Inputs -->
                             <?php for ($i = 0; $i < $rest; $i++) { ?>
                                 <div class="row row-auto">
 
+                                    <!-- Printa o identificador da restrição -->
                                     <div class="col col-auto">
                                         <div style="width: 60px;">
                                             <p>R.<?php echo ($i + 1) ?></p>
                                         </div>
                                     </div>
 
+                                    <!-- A partir da quantidade de variáveis, irá apresentar a quantidade de inputs necessários -->
                                     <?php for ($j = 0; $j < $var; $j++) { ?>
                                         <div class="col col-auto">
                                             <input class="num" type="number" name="v<?php echo ($i . $j) ?>" id="v<?php echo ($i . $j) ?>">
                                         </div>
                                     <?php } ?>
 
+                                    <!-- Define os sinais -->
                                     <div class="col col-auto">
                                         <div class="btn-group" role="group" aria-label="Basic example" style="margin-bottom: 7px; height: 30px">
 
-                                            <input type="checkbox" class="btn-check" name="s<?php echo($i) ?>[]" value="<" id="s<?php echo ($i) ?>1" autocomplete="off">
-                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>1"><</label>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value="<" id="s<?php echo ($i) ?>1" autocomplete="off">
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>1"><?php echo "<" ?></label>
 
-                                                    <input type="checkbox" class="btn-check" name="s<?php echo($i) ?>[]" value="=" id="s<?php echo ($i) ?>2" autocomplete="off">
-                                                    <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>2">=</label>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value="=" id="s<?php echo ($i) ?>2" autocomplete="off">
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>2">=</label>
 
-                                                    <input type="checkbox" class="btn-check" name="s<?php echo($i) ?>[]" value=">" id="s<?php echo ($i) ?>3" autocomplete="off">
-                                                    <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>3">></label>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value=">" id="s<?php echo ($i) ?>3" autocomplete="off">
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>3">></label>
 
                                         </div>
                                     </div>
@@ -107,8 +130,14 @@ $rest = $_POST["rest"];
 
                             <?php } ?>
                         </div>
+
+                        <div class="row row-auto justify-content-center align-items-center">
+                            <div class="col col-auto m-5">
+                                <input type="submit" class="btn btn-primary " value="Resolver">
+                            </div>
+                        </div>
                 </div>
-                <input type="submit" class="btn btn-danger" value="perigo">
+
                 </form>
             </div>
         </div>
