@@ -36,11 +36,12 @@ $rest = $_POST["rest"];
 
                             <!-- Primeira linha ( definir se é maximização ou minimização ) -->
                             <div class="row mb-2">
+                                <div class="col col-auto">
+                                    <p>Informe o tipo de problema</p>
+                                </div>
                                 <div class="col">
                                     <input type="radio" class="btn-check" name="options" id="option1" value="0" autocomplete="off" checked>
                                     <label class="btn btn-outline-warning btn-sm" for="option1">Maximizar</label>
-                                </div>
-                                <div class="col">
                                     <input type="radio" class="btn-check" name="options" id="option2" value="1" autocomplete="off">
                                     <label class=" btn btn-outline-warning btn-sm" for="option2">Minimizar</label>
                                 </div>
@@ -61,6 +62,10 @@ $rest = $_POST["rest"];
                                 }
                                 ?>
                             </div>
+
+
+
+
 
                             <!-- Terceira linha ( definir a Z e mostrar identificadores de colunas ) -->
                             <div class="row row-auto">
@@ -132,7 +137,7 @@ $rest = $_POST["rest"];
                         </div>
 
                         <div class="row row-auto justify-content-center align-items-center">
-                            <div class="col col-auto m-5">
+                            <div class="col m-2">
                                 <input type="submit" class="btn btn-primary " value="Resolver">
                             </div>
                         </div>
