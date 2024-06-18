@@ -145,7 +145,6 @@ $rest = $_POST["rest"];
             </div>
         </div>
     </div>
-    </div>
 </body>
 
 </html>
