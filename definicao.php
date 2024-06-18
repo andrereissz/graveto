@@ -27,7 +27,7 @@ $rest = $_POST["rest"];
                     Definindo Restrições
                 </div>
                 <div class="card-body">
-                    <form action="teste.php" method="POST">
+                    <form action="maximizacao.php" method="POST">
                         <input type="hidden" name="var" value="<?php echo ($_POST["var"]) ?>">
                         <input type="hidden" name="rest" value="<?php echo ($_POST["rest"]) ?>">
 
@@ -40,9 +40,9 @@ $rest = $_POST["rest"];
                                     <p>Informe o tipo de problema</p>
                                 </div>
                                 <div class="col">
-                                    <input type="radio" class="btn-check" name="options" id="option1" value="0" autocomplete="off" checked>
+                                    <input type="radio" class="btn-check" name="options" id="option1" value="Maximizar" autocomplete="off" checked>
                                     <label class="btn btn-outline-warning btn-sm" for="option1">Maximizar</label>
-                                    <input type="radio" class="btn-check" name="options" id="option2" value="1" autocomplete="off">
+                                    <input type="radio" class="btn-check" name="options" id="option2" value="Minimizar" autocomplete="off">
                                     <label class=" btn btn-outline-warning btn-sm" for="option2">Minimizar</label>
                                 </div>
                             </div>
