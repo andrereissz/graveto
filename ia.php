@@ -14,15 +14,15 @@ $headers = [
 ];
 
 $json_modelo = "{
-    problema: 'Maximizar',
-    objetivo: [2, 3],
-    restricoes: [
+    'problema': 'Maximizar',
+    'objetivo': [2, 3],
+    'restricoes': [
       [1, 1],
       [2, 2],
       [10, 3],
     ],
-    relacoes: ['<=', '=', '>='],
-    rhs: [5, 8, 7],
+    'relacoes': ['<=', '=', '>='],
+    'rhs': [5, 8, 7],
   }";
 
 $mensagem = "
@@ -73,11 +73,165 @@ curl_close($ch);
 
 // Converta a resposta JSON em um array PHP
 $responseData = json_decode($response, true);
+$json = $responseData["choices"][0]["message"]["content"];
+$jsonData = json_decode($json, true);
 
-// Imprima a resposta
-if (isset($responseData['choices'][0]['message']['content'])) {
-    $reply = $responseData['choices'][0]['message']['content'];
-    echo $reply;
-} else {
-    echo 'Erro ao obter a resposta do ChatGPT';
+$problema = $jsonData['problema'];
+$objetivo = $jsonData['objetivo'];
+$restricoes = $jsonData['restricoes'];
+$relacoes = $jsonData['relacoes'];
+$rhs = $jsonData['rhs'];
+
+
+$var = count($objetivo);
+$rest = count($restricoes);
+
+function like($needle, $haystack)
+{
+    $regex = '/' . str_replace('%', '.*?', $needle) . '/';
+
+    return preg_match($regex, $haystack) > 0;
 }
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>REVISANDO PROBLEMA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Krona One' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="divzona d-flex flex-column min-vh-100 min-vw-100" style="background-color: #C6FFCB;">
+        <div class="container d-flex flex-grow-1 justify-content-center align-items-center">
+            <div class="card text-center border-dark">
+                <div class="card-header" style="font-family: Krona One;">
+                    Definindo Restrições
+                </div>
+                <div class="card-body">
+                    <form action="maximizacao.php" method="POST">
+                        <input type="hidden" name="var" value="<?php echo $var ?>">
+                        <input type="hidden" name="rest" value="<?php echo $rest ?>">
+
+                        <!-- Corpo do card -->
+                        <div class="col col-auto">
+
+                            <!-- Primeira linha ( definir se é maximização ou minimização ) -->
+                            <div class="row mb-2">
+                                <div class="col col-auto">
+                                    <p>Informe o tipo de problema</p>
+                                </div>
+                                <div class="col">
+                                    <input type="radio" class="btn-check" name="options" id="option1" value="Maximizar" autocomplete="off" <?php if ($problema == 'Maximizar') print 'checked'; ?>>
+                                    <label class="btn btn-outline-warning btn-sm" for="option1">Maximizar</label>
+                                    <input type="radio" class="btn-check" name="options" id="option2" value="Minimizar" autocomplete="off" <?php if ($problema == 'Minimizar') print 'checked'; ?>>
+                                    <label class=" btn btn-outline-warning btn-sm" for="option2">Minimizar</label>
+                                </div>
+                            </div>
+
+                            <!-- Segunda linha ( exibir variáveis ) -->
+                            <div class="row">
+                                <div style="width: 84px; height: 40px"></div>
+                                <?php
+                                for ($j = 0; $j < $var; $j++) {
+                                ?>
+                                    <div class="col col-auto">
+                                        <div style="width: 60px;">
+                                            <p><?php echo ("x" . $j + 1) ?></p>
+                                        </div>
+                                    </div>
+                                <?php
+                                }
+                                ?>
+                            </div>
+
+
+                            <!-- Terceira linha ( definir a Z e mostrar identificadores de colunas ) -->
+                            <div class="row row-auto">
+                                <div style="width: 84px;">
+                                    <p>Z</p>
+                                </div>
+                                <?php
+                                for ($j = 0; $j < $var; $j++) {
+                                ?>
+                                    <div class="col col-auto">
+                                        <div style="width: 60px;">
+                                            <input class="num" type="number" name="z<?php echo ($j) ?>" id="z<?php echo ($j) ?>" value="<?php echo $objetivo[$j] ?>">
+                                        </div>
+                                    </div>
+                                <?php
+                                }
+                                ?>
+                                <div class="col col-auto">
+                                    <div style="width: 80px;">
+                                        <p>Sinais</p>
+                                    </div>
+                                </div>
+                                <div class="col col-auto">
+                                    <div style="width: 60px;">
+                                        <p>R.H.S</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Inputs -->
+                            <?php for ($i = 0; $i < $rest; $i++) { ?>
+                                <div class="row row-auto">
+
+                                    <!-- Printa o identificador da restrição -->
+                                    <div class="col col-auto">
+                                        <div style="width: 60px;">
+                                            <p>R.<?php echo ($i + 1) ?></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- A partir da quantidade de variáveis, irá apresentar a quantidade de inputs necessários -->
+                                    <?php for ($j = 0; $j < $var; $j++) { ?>
+                                        <div class="col col-auto">
+                                            <input class="num" type="number" name="v<?php echo ($i . $j) ?>" id="v<?php echo ($i . $j) ?>" value="<?php echo $restricoes[$i][$j] ?>">
+                                        </div>
+                                    <?php } ?>
+
+                                    <!-- Define os sinais -->
+                                    <div class="col col-auto">
+                                        <div class="btn-group" role="group" aria-label="Basic example" style="margin-bottom: 7px; height: 30px">
+
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value="<" id="s<?php echo ($i) ?>1" autocomplete="off" <?php if (like('<%', $relacoes[$i])) print 'checked'; ?>>
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>1"><?php echo "<" ?></label>
+
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value="=" id="s<?php echo ($i) ?>2" autocomplete="off" <?php if (like('%=%', $relacoes[$i])) print 'checked'; ?>>
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>2">=</label>
+
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value=">" id="s<?php echo ($i) ?>3" autocomplete="off" <?php if (like('%>', $relacoes[$i])) print 'checked'; ?>>
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>3">></label>
+
+                                        </div>
+                                    </div>
+                                    <div class="col col-auto">
+                                        <input class="num" type="number" name="r<?php echo ($i) ?>" id="r<?php echo ($i . "_" . $j) ?>" value="<?php echo $rhs[$i] ?>">
+                                    </div>
+                                </div>
+
+                            <?php } ?>
+                        </div>
+
+                        <div class="row row-auto justify-content-center align-items-center">
+                            <div class="col m-2">
+                                <input type="submit" class="btn btn-primary " value="Resolver">
+                            </div>
+                        </div>
+                </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
