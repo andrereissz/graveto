@@ -201,13 +201,13 @@ function like($needle, $haystack)
                                     <div class="col col-auto">
                                         <div class="btn-group" role="group" aria-label="Basic example" style="margin-bottom: 7px; height: 30px">
 
-                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value="<" id="s<?php echo ($i) ?>1" autocomplete="off" <?php if (like('<%', $relacoes[$i])) print 'checked'; ?>>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>1" value="<" id="s<?php echo ($i) ?>1" autocomplete="off" <?php if (like('<%', $relacoes[$i])) print 'checked'; ?>>
                                             <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>1"><?php echo "<" ?></label>
 
-                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value="=" id="s<?php echo ($i) ?>2" autocomplete="off" <?php if (like('%=%', $relacoes[$i])) print 'checked'; ?>>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>2" value="=" id="s<?php echo ($i) ?>2" autocomplete="off" <?php if (like('%=%', $relacoes[$i])) print 'checked'; ?>>
                                             <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>2">=</label>
 
-                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value=">" id="s<?php echo ($i) ?>3" autocomplete="off" <?php if (like('%>', $relacoes[$i])) print 'checked'; ?>>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>3" value=">" id="s<?php echo ($i) ?>3" autocomplete="off" <?php if (like('%>', $relacoes[$i])) print 'checked'; ?>>
                                             <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>3">></label>
 
                                         </div>
