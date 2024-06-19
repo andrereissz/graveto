@@ -310,7 +310,7 @@ function printMatSolved($mat, $iteracao, $piv)
                             echo round($mat[$i][$j], 2);
                         }
 ?>
-                        " aria-label="Disabled input example" disabled readonly style="width: 100px;
+                        "aria-label="Disabled input example" disabled readonly style="width: 100px;
 <?php
                         if ($j == $col - 1) {
                             print 'background-color:green; color: white';
@@ -325,6 +325,13 @@ function printMatSolved($mat, $iteracao, $piv)
             <?php
             }
             ?>
+            <div class="row row-auto">
+                <div class="col w-full align-center">
+                    <form action="graph.php" method="post">
+                        <input type="submit" class="btn btn-success w-25 justify-center " value="Solução Gráfica">
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 <?php
@@ -429,6 +436,8 @@ function maximizeSimplex($mat)
             <?php maximizeSimplex(mkMatriz($n, $m)) ?>
         </div>
     </div>
+
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
 </body>
 
 </html>

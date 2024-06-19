@@ -14,6 +14,8 @@
     <img src="graveto.png" alt="tronco" width="100%" height="100%" style="position: absolute;">
     <a href="options.html" class="btn btn-graveto shadow-sm p-2" style="position: absolute; margin: 520px 520px; height: 50px; width: 300px; font-family: Krona One; align-items: center; justify-content: center;">Inserir
         Problema</a>
+
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
 </body>
 
 </html>

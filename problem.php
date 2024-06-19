@@ -47,6 +47,7 @@
             </div>
         </div>
     </div>
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
 </body>
 
 </html>

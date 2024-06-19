@@ -231,5 +231,5 @@ function like($needle, $haystack)
             </div>
         </div>
     </div>
-    <script src="js/bootstrap.bundle.js"></script>
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
 </body>
