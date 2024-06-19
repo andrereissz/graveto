@@ -44,7 +44,7 @@ function mkMatriz($n, $m)
         array_push($matOut[$i + 1], $_POST["r" . $i]);
     }
     for ($i = 0; $i < $n; $i++) {
-        array_push($GLOBALS['base'], 's' . $i + 1);
+        array_push($GLOBALS['base'], 's' . $n + $i - 1);
     }
     return ($matOut);
 }
@@ -57,7 +57,6 @@ function printMat($mat, $iteracao)
 { //imprime a matriz
     $lin = count($mat);
     $col = count($mat[0]);
-    var_dump($GLOBALS['base']);
 ?>
     <div class="card text-center border-dark mt-5">
         <div class="card-header" style="font-family: Krona One;">
@@ -347,6 +346,7 @@ function checkOptimality($mat)
 
 function escalona($mat, $pivot)
 { //escalona a matriz para transformar o pivo em 1 e os elementos acima e abaixo dele em 0
+    $GLOBALS['base'][$pivot[0] - 1] = 'x' . $pivot[1] + 1;
     $div = $mat[$pivot[0]][$pivot[1]];
     for ($i = 0; $i < count($mat[0]); $i++) {
         $mat[$pivot[0]][$i] = ($mat[$pivot[0]][$i]) / $div; //divide a linha pivo pelo elemento pivo para transforma-lo em 1
