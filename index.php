@@ -11,9 +11,11 @@
 </head>
 
 <body>
-    <img src="graveto.png" alt="tronco" width="100%" height="100%" style="position: absolute;">
-    <a href="options.html" class="btn btn-graveto shadow-sm p-2" style="position: absolute; margin: 520px 520px; height: 50px; width: 300px; font-family: Krona One; align-items: center; justify-content: center;">Inserir
-        Problema</a>
+    <div class="d-flex flex-column min-vh-100 min-vw-100" style="background-image: url('views/components/graveto.png'); background-size: 100% 100%;">
+        <a href="options.php" class="btn btn-graveto shadow-sm p-2" style="position: absolute; margin: 520px 520px; height: 50px; width: 300px; font-family: Krona One; align-items: center; justify-content: center;">Inserir
+            Problema</a>
+    </div>
+    
 
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
 </body>

@@ -19,13 +19,14 @@ $rest = $_POST["rest"];
 
 <body>
     <div class="divzona d-flex flex-column min-vh-100 min-vw-100" style="background-color: #C6FFCB;">
+    <a href="index.php" class="btn position-absolute rounded-circle m-2" style="width: 100px; height: 100px; background-image: url('views/components/btn.png'); background-size: 100% 100%; scale: -1"></a>
         <div class="container d-flex flex-grow-1 justify-content-center align-items-center">
             <div class="card text-center border-dark">
                 <div class="card-header" style="font-family: Krona One;">
                     Definindo Restrições
                 </div>
                 <div class="card-body">
-                    <form action="maximizacao.php" method="POST">
+                    <form action="simplex.php" method="POST">
                         <input type="hidden" name="var" value="<?php echo ($_POST["var"]) ?>">
                         <input type="hidden" name="rest" value="<?php echo ($_POST["rest"]) ?>">
 
@@ -75,7 +76,7 @@ $rest = $_POST["rest"];
                                 ?>
                                     <div class="col col-auto">
                                         <div style="width: 60px;">
-                                            <input class="num" type="number" name="z<?php echo ($j) ?>" id="z<?php echo ($j) ?>">
+                                            <input class="num" type="text" name="z<?php echo ($j) ?>" id="z<?php echo ($j) ?>" required>
                                         </div>
                                     </div>
                                 <?php
@@ -107,7 +108,7 @@ $rest = $_POST["rest"];
                                     <!-- A partir da quantidade de variáveis, irá apresentar a quantidade de inputs necessários -->
                                     <?php for ($j = 0; $j < $var; $j++) { ?>
                                         <div class="col col-auto">
-                                            <input class="num" type="number" name="v<?php echo ($i . $j) ?>" id="v<?php echo ($i . $j) ?>">
+                                            <input class="num" type="text" name="v<?php echo ($i . $j) ?>" id="v<?php echo ($i . $j) ?>" required>
                                         </div>
                                     <?php } ?>
 
@@ -115,19 +116,19 @@ $rest = $_POST["rest"];
                                     <div class="col col-auto">
                                         <div class="btn-group" role="group" aria-label="Basic example" style="margin-bottom: 7px; height: 30px">
 
-                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value="<" id="s<?php echo ($i) ?>1" autocomplete="off">
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>1" value="<" id="s<?php echo ($i) ?>1" autocomplete="off">
                                             <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>1"><?php echo "<" ?></label>
 
-                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value="=" id="s<?php echo ($i) ?>2" autocomplete="off">
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>2" value="=" id="s<?php echo ($i) ?>2" autocomplete="off">
                                             <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>2">=</label>
 
-                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>[]" value=">" id="s<?php echo ($i) ?>3" autocomplete="off">
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>3" value=">" id="s<?php echo ($i) ?>3" autocomplete="off">
                                             <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>3">></label>
 
                                         </div>
                                     </div>
                                     <div class="col col-auto">
-                                        <input class="num" type="number" name="r<?php echo ($i) ?>" id="r<?php echo ($i . "_" . $j) ?>">
+                                        <input class="num" type="text" name="r<?php echo ($i) ?>" id="r<?php echo ($i . "_" . $j) ?>">
                                     </div>
                                 </div>
 

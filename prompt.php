@@ -10,6 +10,7 @@
 
 <body>
     <div class="divzona d-flex flex-column min-vh-100 min-vw-100" style="background-color: #C6FFCB;">
+    <a href="index.php" class="btn position-absolute rounded-circle m-2" style="width: 100px; height: 100px; background-image: url('views/components/btn.png'); background-size: 100% 100%; scale: -1"></a>
         <div class="container d-flex flex-grow-1 justify-content-center align-items-center">
             <div class="card text-center border-dark">
                 <div class="card-header" style="font-family: Krona One;">

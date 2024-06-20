@@ -4,6 +4,8 @@ $n = $_POST["rest"];
 $m = $_POST["var"];
 $base = [];
 
+
+
 // FUNÇÕES PARA GERAR MATRIZ INICIAL
 
 function mkIdentidade($n)
@@ -28,7 +30,7 @@ function mkMatriz($n, $m)
     $matOut = array(array()); //matriz de output
     for ($j = 0; $j < ($n + $m + 1); $j++) {
         if ($j < $m) {
-            $z[$j] = $_POST["z" . $j];
+            $z[$j] = $_POST["z" . $j] * -1;
         } else {
             $z[$j] = 0;
         }
@@ -44,9 +46,9 @@ function mkMatriz($n, $m)
         array_push($matOut[$i + 1], $_POST["r" . $i]);
     }
     for ($i = 0; $i < $n; $i++) {
-        array_push($GLOBALS['base'], 's' . $n + $i - 1);
+        array_push($GLOBALS['base'], 's' . $n + $i);
     }
-    return ($matOut);
+    return (verificaSinal($matOut));
 }
 
 //------------------------------------------------------------------------
@@ -103,7 +105,7 @@ function printMat($mat, $iteracao)
                         <div class="my-2 fw-bold" style="width: 100px; height: 30px;">
                             <?php
                             if ($i == 0) {
-                                echo 'z (' . substr($_POST['options'], 0, 3) . ')';
+                                echo '-z (' . substr($_POST['options'], 0, 3) . ')';
                             } else {
                                 echo $GLOBALS['base'][$i - 1];
                             }
@@ -191,7 +193,7 @@ function printMatPivot($mat, $iteracao, $piv)
                         <div class="my-2 fw-bold" style="width: 100px; height: 30px;">
                             <?php
                             if ($i == 0) {
-                                echo 'z (' . substr($_POST['options'], 0, 3) . ')';
+                                echo '-z (' . substr($_POST['options'], 0, 3) . ')';
                             } else {
                                 echo $GLOBALS['base'][$i - 1];
                             }
@@ -287,7 +289,7 @@ function printMatSolved($mat, $iteracao, $piv)
                         <div class="my-2 fw-bold" style="width: 100px; height: 30px;">
                             <?php
                             if ($i == 0) {
-                                echo 'z (' . substr($_POST['options'], 0, 3) . ')';
+                                echo '-z (' . substr($_POST['options'], 0, 3) . ')';
                             } else {
                                 echo $GLOBALS['base'][$i - 1];
                             }
@@ -337,38 +339,8 @@ function printMatSolved($mat, $iteracao, $piv)
 <?php
 }
 
-//----------------------------------------------------------------------------------------
-
 //FUNÇÕES PARA REALIZAR O SIMPLEX MAXIMIZAÇÃO
 
-function checkOptimality($mat)
-{ //teste de otimalidade
-    for ($j = 0; $j < count($mat[0]); $j++) {
-        if ($mat[0][$j] > 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-function escalona($mat, $pivot)
-{ //escalona a matriz para transformar o pivo em 1 e os elementos acima e abaixo dele em 0
-    $GLOBALS['base'][$pivot[0] - 1] = 'x' . $pivot[1] + 1;
-    $div = $mat[$pivot[0]][$pivot[1]];
-    for ($i = 0; $i < count($mat[0]); $i++) {
-        $mat[$pivot[0]][$i] = ($mat[$pivot[0]][$i]) / $div; //divide a linha pivo pelo elemento pivo para transforma-lo em 1
-    }
-
-    for ($i = 0; $i < count($mat); $i++) {
-        $mult = $mat[$i][$pivot[1]];
-        if ($i != $pivot[0]) {
-            for ($j = 0; $j < count($mat[0]); $j++) {
-                $mat[$i][$j] -= $mult * $mat[$pivot[0]][$j]; //zera o elemento acima do pivo e faz a subtração entre as demais colunas
-            }
-        }
-    }
-    return $mat;
-}
 function findPivot($mat)
 { //encontra a linha e coluna do elemento pivo
     $lin = count($mat);
@@ -396,6 +368,38 @@ function findPivot($mat)
     $pivot = array($pivotRow, $pivotCol);
     return $pivot;
 }
+
+
+function escalona($mat, $pivot)
+{ //escalona a matriz para transformar o pivo em 1 e os elementos acima e abaixo dele em 0
+    $GLOBALS['base'][$pivot[0] - 1] = 'x' . $pivot[1] + 1;
+    $div = $mat[$pivot[0]][$pivot[1]];
+    for ($i = 0; $i < count($mat[0]); $i++) {
+        $mat[$pivot[0]][$i] = ($mat[$pivot[0]][$i]) / $div; //divide a linha pivo pelo elemento pivo para transforma-lo em 1
+    }
+
+    for ($i = 0; $i < count($mat); $i++) {
+        $mult = $mat[$i][$pivot[1]];
+        if ($i != $pivot[0]) {
+            for ($j = 0; $j < count($mat[0]); $j++) {
+                $mat[$i][$j] -= $mult * $mat[$pivot[0]][$j]; //zera o elemento acima do pivo e faz a subtração entre as demais colunas
+            }
+        }
+    }
+    return $mat;
+}
+
+function checkOptimality($mat)
+{ //teste de otimalidade
+    for ($j = 0; $j < count($mat[0]); $j++) {
+        if ($mat[0][$j] > 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 function maximizeSimplex($mat)
 { //realiza maximização pelo método simplex tabular
     $it = 1;
@@ -413,6 +417,108 @@ function maximizeSimplex($mat)
         $it++;
     } while (!checkOptimality($mat)); //realiza outra iteração enquanto não encontrar uma solução ótima
 }
+
+//-----------------------------------------------------------------------------------------------------------------------
+//FUNÇÕES PARA REALIZAR DUAL SIMPLEX
+
+
+function verificaSinal($mat)
+{
+    for($i = 1; $i <= count($mat); $i++){
+        $substr = '';
+        for($j = 1; $j <= 3; $j++){
+            if(isset($_POST["s".($i-1).$j])){
+                $substr = $substr.$_POST["s".($i-1).$j];
+            } 
+        }
+        if($substr == '=>'){
+            for($j = 0; $j < count($mat[$i]); $j++){
+                $mat[$i][$j] *= -1;
+                
+            }
+        }
+    }
+    
+    return $mat;
+}
+
+function findPivotDual($mat)
+{ //encontra a linha e coluna do elemento pivo
+    $lin = count($mat);
+    $col = count($mat[0]);
+    $pivotCol = 0;
+    $pivotRow = 0;
+    $minRow = PHP_INT_MAX;
+    $minCol = PHP_INT_MAX;
+
+    for ($i = 1; $i <= $lin - 1; $i++) { //encontra a linha pivo
+        if($mat[$i][$col-1] < $minRow){
+            $minRow = $mat[$i][$col-1];
+            $pivotRow = $i;
+        }
+    }
+    
+    for ($j = 0; $j < $col - 1; $j++) {
+        if($mat[$pivotRow][$j] != 0 && $mat[0][$j] != 0){
+            if(abs($mat[0][$j] / $mat[$pivotRow][$j]) < $minCol){
+                $minCol = abs($mat[0][$j] / $mat[$pivotRow][$j]);
+                $pivotCol = $j;
+            }
+        }
+    }
+
+    $pivot = array($pivotRow, $pivotCol);
+    return $pivot;
+}
+
+
+function escalonaDual($mat, $pivot)
+{ //escalona a matriz para transformar o pivo em 1 e os elementos acima e abaixo dele em 0
+    $GLOBALS['base'][$pivot[0] - 1] = 'x' . $pivot[1] + 1;
+    $div = $mat[$pivot[0]][$pivot[1]];
+    for ($i = 0; $i < count($mat[0]); $i++) {
+        $mat[$pivot[0]][$i] = ($mat[$pivot[0]][$i]) / $div; //divide a linha pivo pelo elemento pivo para transforma-lo em 1
+    }
+
+    for ($i = 0; $i < count($mat); $i++) {
+        $mult = $mat[$i][$pivot[1]];
+        if ($i != $pivot[0]) {
+            for ($j = 0; $j < count($mat[0]); $j++) {
+                $mat[$i][$j] -= $mult * $mat[$pivot[0]][$j]; //zera o elemento acima do pivo e faz a subtração entre as demais colunas
+            }
+        }
+    }
+    return $mat;
+}
+
+function checkOptimalityDual($mat)
+{ //teste de otimalidade
+    for ($i = 1; $i < $GLOBALS['n']; $i++) {
+        if ($mat[$i][count($mat[$i]) - 1] < 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function minimizeDualSimplex($mat)
+{ //realiza maximização pelo método simplex tabular
+    $it = 1;
+    do {
+        if ($it >= 20) break; // para de executar caso efetue mais de 20 iterações
+        printMat($mat, $it);
+        $piv = findPivotDual($mat);
+        printMatPivot($mat, $it, $piv);
+        $mat = escalona($mat, $piv);
+        if (checkOptimalityDual($mat)) {
+            $it++;
+            printMatSolved($mat, $it, $piv);
+            break;
+        }
+        $it++;
+    } while (!checkOptimality($mat)); //realiza outra iteração enquanto não encontrar uma solução ótima
+}
+
 
 //----------------------------------------------------------------------------------------
 
@@ -432,8 +538,13 @@ function maximizeSimplex($mat)
 
 <body>
     <div class="divzona d-flex flex-column min-vh-100 min-vw-100" style="background-color: #C6FFCB;">
+    <a href="index.php" class="btn position-absolute rounded-circle m-2" style="width: 100px; height: 100px; background-image: url('views/components/btn.png'); background-size: 100% 100%; scale: -1"></a>
         <div class="container d-flex flex-column justify-content-center align-items-center p-3">
-            <?php maximizeSimplex(mkMatriz($n, $m)) ?>
+            <?php 
+                if(substr($_POST['options'], 0, 3) == 'Max'){
+                    maximizeSimplex(mkMatriz($n, $m));
+                } else minimizeDualSimplex(mkMatriz($n, $m));
+            ?>
         </div>
     </div>
 
