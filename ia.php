@@ -76,8 +76,6 @@ $responseData = json_decode($response, true);
 $json = $responseData["choices"][0]["message"]["content"];
 $jsonData = json_decode($json, true);
 
-var_dump($response);
-
 $problema = $jsonData['problema'];
 $objetivo = $jsonData['objetivo'];
 $restricoes = $jsonData['restricoes'];
