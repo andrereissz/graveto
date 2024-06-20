@@ -12,25 +12,41 @@ $rest = $_POST["rest"];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DEFININDO RESTRIÇÕES</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link href='https://fonts.googleapis.com/css?family=Krona One' rel='stylesheet'>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
     <div class="divzona d-flex flex-column min-vh-100 min-vw-100" style="background-color: #C6FFCB;">
+    <a href="index.php" class="btn position-absolute rounded-circle m-2" style="width: 100px; height: 100px; background-image: url('views/components/btn.png'); background-size: 100% 100%; scale: -1"></a>
         <div class="container d-flex flex-grow-1 justify-content-center align-items-center">
             <div class="card text-center border-dark">
                 <div class="card-header" style="font-family: Krona One;">
                     Definindo Restrições
                 </div>
                 <div class="card-body">
-                    <form action="teste.php" method="POST">
-                        <input type="hidden" name="var" value="<?php echo($_POST["var"]) ?>">
-                        <input type="hidden" name="rest" value="<?php echo($_POST["rest"]) ?>">
+                    <form action="simplex.php" method="POST">
+                        <input type="hidden" name="var" value="<?php echo ($_POST["var"]) ?>">
+                        <input type="hidden" name="rest" value="<?php echo ($_POST["rest"]) ?>">
+
+                        <!-- Corpo do card -->
                         <div class="col col-auto">
+
+                            <!-- Primeira linha ( definir se é maximização ou minimização ) -->
+                            <div class="row mb-2">
+                                <div class="col col-auto">
+                                    <p>Informe o tipo de problema</p>
+                                </div>
+                                <div class="col">
+                                    <input type="radio" class="btn-check" name="options" id="option1" value="Maximizar" autocomplete="off" checked>
+                                    <label class="btn btn-outline-warning btn-sm" for="option1">Maximizar</label>
+                                    <input type="radio" class="btn-check" name="options" id="option2" value="Minimizar" autocomplete="off">
+                                    <label class=" btn btn-outline-warning btn-sm" for="option2">Minimizar</label>
+                                </div>
+                            </div>
+
+                            <!-- Segunda linha ( exibir variáveis ) -->
                             <div class="row">
                                 <div style="width: 84px; height: 40px"></div>
                                 <?php
@@ -45,6 +61,12 @@ $rest = $_POST["rest"];
                                 }
                                 ?>
                             </div>
+
+
+
+
+
+                            <!-- Terceira linha ( definir a Z e mostrar identificadores de colunas ) -->
                             <div class="row row-auto">
                                 <div style="width: 84px;">
                                     <p>Z</p>
@@ -54,7 +76,7 @@ $rest = $_POST["rest"];
                                 ?>
                                     <div class="col col-auto">
                                         <div style="width: 60px;">
-                                            <input class="num" type="number" name="z<?php echo ($j) ?>" id="z<?php echo ($j) ?>">
+                                            <input class="num" type="text" name="z<?php echo ($j) ?>" id="z<?php echo ($j) ?>" required>
                                         </div>
                                     </div>
                                 <?php
@@ -71,49 +93,60 @@ $rest = $_POST["rest"];
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Inputs -->
                             <?php for ($i = 0; $i < $rest; $i++) { ?>
                                 <div class="row row-auto">
 
+                                    <!-- Printa o identificador da restrição -->
                                     <div class="col col-auto">
                                         <div style="width: 60px;">
                                             <p>R.<?php echo ($i + 1) ?></p>
                                         </div>
                                     </div>
 
+                                    <!-- A partir da quantidade de variáveis, irá apresentar a quantidade de inputs necessários -->
                                     <?php for ($j = 0; $j < $var; $j++) { ?>
                                         <div class="col col-auto">
-                                            <input class="num" type="number" name="v<?php echo ($i . $j) ?>" id="v<?php echo ($i . $j) ?>">
+                                            <input class="num" type="text" name="v<?php echo ($i . $j) ?>" id="v<?php echo ($i . $j) ?>" required>
                                         </div>
                                     <?php } ?>
 
+                                    <!-- Define os sinais -->
                                     <div class="col col-auto">
                                         <div class="btn-group" role="group" aria-label="Basic example" style="margin-bottom: 7px; height: 30px">
 
-                                            <input type="checkbox" class="btn-check" name="s<?php echo($i) ?>[]" value="<" id="s<?php echo ($i) ?>1" autocomplete="off">
-                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>1"><</label>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>1" value="<" id="s<?php echo ($i) ?>1" autocomplete="off">
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>1"><?php echo "<" ?></label>
 
-                                                    <input type="checkbox" class="btn-check" name="s<?php echo($i) ?>[]" value="=" id="s<?php echo ($i) ?>2" autocomplete="off">
-                                                    <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>2">=</label>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>2" value="=" id="s<?php echo ($i) ?>2" autocomplete="off">
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>2">=</label>
 
-                                                    <input type="checkbox" class="btn-check" name="s<?php echo($i) ?>[]" value=">" id="s<?php echo ($i) ?>3" autocomplete="off">
-                                                    <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>3">></label>
+                                            <input type="checkbox" class="btn-check" name="s<?php echo ($i) ?>3" value=">" id="s<?php echo ($i) ?>3" autocomplete="off">
+                                            <label class="btn btn-outline-warning btn-sm" for="s<?php echo ($i) ?>3">></label>
 
                                         </div>
                                     </div>
                                     <div class="col col-auto">
-                                        <input class="num" type="number" name="r<?php echo ($i) ?>" id="r<?php echo ($i . "_" . $j) ?>">
+                                        <input class="num" type="text" name="r<?php echo ($i) ?>" id="r<?php echo ($i . "_" . $j) ?>">
                                     </div>
                                 </div>
 
                             <?php } ?>
                         </div>
+
+                        <div class="row row-auto justify-content-center align-items-center">
+                            <div class="col m-2">
+                                <input type="submit" class="btn btn-primary " value="Resolver">
+                            </div>
+                        </div>
                 </div>
-                <input type="submit" class="btn btn-danger" value="perigo">
+
                 </form>
             </div>
         </div>
     </div>
-    </div>
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
 </body>
 
 </html>
