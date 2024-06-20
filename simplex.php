@@ -3,6 +3,11 @@
 $n = $_POST["rest"];
 $m = $_POST["var"];
 $base = [];
+$zinteira = [];
+
+for ($j = 0; $j < $m; $j++) {
+    array_push($zinteira, $_POST['z' . $j]);
+}
 
 // FUNÇÕES PARA GERAR MATRIZ INICIAL
 
@@ -103,7 +108,7 @@ function printMat($mat, $iteracao)
                         <div class="my-2 fw-bold" style="width: 100px; height: 30px;">
                             <?php
                             if ($i == 0) {
-                                echo '-z (' . substr($_POST['options'], 0, 3) . ')';
+                                echo 'z (' . substr($_POST['options'], 0, 3) . ')';
                             } else {
                                 echo $GLOBALS['base'][$i - 1];
                             }
@@ -119,12 +124,12 @@ function printMat($mat, $iteracao)
                         if ($i == 0) {
                             if (round($mat[$i][$j], 2) == 0) {
                                 echo abs(round($mat[$i][$j], 2));
-                            } else{
+                            } else {
                                 echo round($mat[$i][$j], 2);
                             }
-                        } elseif(round($mat[$i][$j], 2) == 0) {
+                        } elseif (round($mat[$i][$j], 2) == 0) {
                             echo abs(round($mat[$i][$j], 2));
-                        } else{
+                        } else {
                             echo round($mat[$i][$j], 2);
                         }
 ?>
@@ -193,7 +198,7 @@ function printMatPivot($mat, $iteracao, $piv)
                         <div class="my-2 fw-bold" style="width: 100px; height: 30px;">
                             <?php
                             if ($i == 0) {
-                                echo '-z (' . substr($_POST['options'], 0, 3) . ')';
+                                echo 'z (' . substr($_POST['options'], 0, 3) . ')';
                             } else {
                                 echo $GLOBALS['base'][$i - 1];
                             }
@@ -209,12 +214,12 @@ function printMatPivot($mat, $iteracao, $piv)
                         if ($i == 0) {
                             if (round($mat[$i][$j], 2) == 0) {
                                 echo abs(round($mat[$i][$j], 2));
-                            } else{
+                            } else {
                                 echo round($mat[$i][$j], 2);
                             }
-                        } elseif(round($mat[$i][$j], 2) == 0) {
+                        } elseif (round($mat[$i][$j], 2) == 0) {
                             echo abs(round($mat[$i][$j], 2));
-                        } else{
+                        } else {
                             echo round($mat[$i][$j], 2);
                         }
 ?>
@@ -284,73 +289,77 @@ function printMatSolved($mat, $iteracao, $piv)
                 ?>
             </div>
             <form action="inteira.php" method="POST">
-            <input type="hidden" name="z" value="<?php echo intval($mat[0][$col -1]) ?>">
-            <?php
-            $variaveis = [];
-            $valores = [];
-            for ($i = 0; $i < $lin; $i++) {
-            ?> <div class="row row-auto">
-                    <div class="col col-auto">
-                        <div class="my-2 fw-bold" style="width: 100px; height: 30px;">
-                            <?php
-                            if ($i == 0) {
-                                echo '-z (' . substr($_POST['options'], 0, 3) . ')';
-                            } else {
-                                echo $GLOBALS['base'][$i - 1];
-                            }
-                            ?>
-                        </div>
-                    </div>
-                    <?php
-                    for ($j = 0; $j < $col; $j++) {
-                    ?>
+                <?php
+                $variaveis = [];
+                $valores = [];
+                $zenviar = [];
+                for ($var = 0; $var < $GLOBALS['m']; $var++) {
+                ?> <input type="hidden" name="zenviar[<?php $var ?>]" value="<?php echo $GLOBALS['zinteira'][$var] ?>">
+                <?php
+                }
+
+                for ($i = 0; $i < $lin; $i++) {
+                ?> <div class="row row-auto">
                         <div class="col col-auto">
-                            <input class="form-control my-2" name="v<?php echo $i.$j ?>" type="text" value="
+                            <div class="my-2 fw-bold" style="width: 100px; height: 30px;">
+                                <?php
+                                if ($i == 0) {
+                                    echo 'z (' . substr($_POST['options'], 0, 3) . ')';
+                                } else {
+                                    echo $GLOBALS['base'][$i - 1];
+                                }
+                                ?>
+                            </div>
+                        </div>
+                        <?php
+                        for ($j = 0; $j < $col; $j++) {
+                        ?>
+                            <div class="col col-auto">
+                                <input class="form-control my-2" name="v<?php echo $i . $j ?>" type="text" value="
 <?php
-                        if ($i == 0) {
-                            if (round($mat[$i][$j], 2) == 0) {
+                            if ($i == 0) {
+                                if (round($mat[$i][$j], 2) == 0) {
+                                    echo abs(round($mat[$i][$j], 2));
+                                } else {
+                                    echo round($mat[$i][$j], 2);
+                                }
+                            } elseif (round($mat[$i][$j], 2) == 0) {
                                 echo abs(round($mat[$i][$j], 2));
-                            } else{
+                            } else {
                                 echo round($mat[$i][$j], 2);
                             }
-                        } elseif(round($mat[$i][$j], 2) == 0) {
-                            echo abs(round($mat[$i][$j], 2));
-                        } else{
-                            echo round($mat[$i][$j], 2);
-                        }
 ?>
-                        "aria-label="Disabled input example" disabled readonly style="width: 100px;
+                        " aria-label="Disabled input example" disabled readonly style="width: 100px;
 <?php
-                        if ($j == $col - 1) {
-                            print 'background-color:green; color: white';
-                        }
+                            if ($j == $col - 1) {
+                                print 'background-color:green; color: white';
+                            }
 ?>
                         ">
-                        </div>
-<?php
+                            </div>
+                            <?php
 
-                    if($i != 0 && $j == 0 && substr($GLOBALS["base"][$i-1], 0,1) == 'x')
-                        {
-                            array_push($variaveis, 'v'.substr($GLOBALS["base"][$i-1], 1,1))
-                    ?>
-                    <input type="hidden" name="variaveis[<?php $i-1 ?>]" value="<?php echo 'x'.substr($GLOBALS["base"][$i-1], 1,1) ?>"> 
-                    <input type="hidden" name="valores[<?php $i-1 ?>]" value="<?php echo intval($mat[$i][$col-1]) ?>"> 
-<?php
-                    }
-                    
-?>            
-                    <?php
-                    }
-                    ?>
-                </div>
-            <?php
-            }
-            ?>
-            <div class="row row-auto">
-                <div class="col w-full align-center">
+                            if ($i != 0 && $j == 0 && substr($GLOBALS["base"][$i - 1], 0, 1) == 'x') {
+                                array_push($variaveis, 'v' . substr($GLOBALS["base"][$i - 1], 1, 1))
+                            ?>
+                                <input type="hidden" name="variaveis[<?php echo substr($GLOBALS["base"][$i - 1], 1, 1) - 1 ?>]" value="<?php echo 'x' . substr($GLOBALS["base"][$i - 1], 1, 1) ?>">
+                                <input type="hidden" name="valores[<?php echo substr($GLOBALS["base"][$i - 1], 1, 1) - 1 ?>]" value="<?php echo intval($mat[$i][$col - 1]) ?>">
+                            <?php
+                            }
+
+                            ?>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                <?php
+                }
+                ?>
+                <div class="row row-auto">
+                    <div class="col w-full align-center">
                         <input type="submit" class="btn btn-success w-25 justify-center " id="inteira" value="Solução Inteira">
+                    </div>
                 </div>
-            </div>
             </form>
         </div>
     </div>
@@ -369,8 +378,8 @@ function findPivot($mat)
     $pivotRow = 0;
 
     for ($j = 0; $j < $col - 1; $j++) { //encontra a coluna pivo
-        if ($mat[0][$j] > $maxCol) {
-            $maxCol = $mat[0][$j];
+        if ($mat[0][$j] < 0 && abs($mat[0][$j]) > $maxCol) {
+            $maxCol = abs($mat[0][$j]);
             $pivotCol = $j;
         }
     }
@@ -410,7 +419,7 @@ function escalona($mat, $pivot)
 function checkOptimality($mat)
 { //teste de otimalidade
     for ($j = 0; $j < count($mat[0]); $j++) {
-        if ($mat[0][$j] > 0) {
+        if ($mat[0][$j] < 0) {
             return false;
         }
     }
@@ -442,21 +451,20 @@ function maximizeSimplex($mat)
 
 function verificaSinal($mat)
 {
-    for($i = 1; $i <= count($mat); $i++){
+    for ($i = 1; $i <= count($mat); $i++) {
         $substr = '';
-        for($j = 1; $j <= 3; $j++){
-            if(isset($_POST["s".($i-1).$j])){
-                $substr = $substr.$_POST["s".($i-1).$j];
-            } 
+        for ($j = 1; $j <= 3; $j++) {
+            if (isset($_POST["s" . ($i - 1) . $j])) {
+                $substr = $substr . $_POST["s" . ($i - 1) . $j];
+            }
         }
-        if($substr == '=>' || $substr == '='){
-            for($j = 0; $j < count($mat[$i]); $j++){
+        if ($substr == '=>' || $substr == '=') {
+            for ($j = 0; $j < count($mat[$i]); $j++) {
                 $mat[$i][$j] *= -1;
-                
             }
         }
     }
-    
+
     return $mat;
 }
 
@@ -470,15 +478,15 @@ function findPivotDual($mat)
     $minCol = PHP_INT_MAX;
 
     for ($i = 1; $i <= $lin - 1; $i++) { //encontra a linha pivo
-        if($mat[$i][$col-1] < $minRow){
-            $minRow = $mat[$i][$col-1];
+        if ($mat[$i][$col - 1] < $minRow) {
+            $minRow = $mat[$i][$col - 1];
             $pivotRow = $i;
         }
     }
-    
+
     for ($j = 0; $j < $col - 1; $j++) {
-        if($mat[$pivotRow][$j] != 0 && $mat[0][$j] != 0){
-            if(abs($mat[0][$j] / $mat[$pivotRow][$j]) < $minCol){
+        if ($mat[$pivotRow][$j] != 0 && $mat[0][$j] != 0) {
+            if (abs($mat[0][$j] / $mat[$pivotRow][$j]) < $minCol) {
                 $minCol = abs($mat[0][$j] / $mat[$pivotRow][$j]);
                 $pivotCol = $j;
             }
@@ -556,12 +564,12 @@ function minimizeDualSimplex($mat)
 
 <body>
     <div class="divzona d-flex flex-column min-vh-100 min-vw-100" style="background-color: #C6FFCB;">
-    <a href="index.php" class="btn position-absolute rounded-circle m-2" style="width: 100px; height: 100px; background-image: url('views/components/btn.png'); background-size: 100% 100%; scale: -1"></a>
+        <a href="index.php" class="btn position-absolute rounded-circle m-2" style="width: 100px; height: 100px; background-image: url('views/components/btn.png'); background-size: 100% 100%; scale: -1;"></a>
         <div class="container d-flex flex-column justify-content-center align-items-center p-3">
-            <?php 
-                if(substr($_POST['options'], 0, 3) == 'Max'){
-                    maximizeSimplex(mkMatriz($n, $m));
-                } else minimizeDualSimplex(mkMatriz($n, $m));
+            <?php
+            if (substr($_POST['options'], 0, 3) == 'Max') {
+                maximizeSimplex(mkMatriz($n, $m));
+            } else minimizeDualSimplex(mkMatriz($n, $m));
             ?>
         </div>
     </div>
