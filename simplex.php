@@ -431,7 +431,7 @@ function verificaSinal($mat)
                 $substr = $substr.$_POST["s".($i-1).$j];
             } 
         }
-        if($substr == '=>'){
+        if($substr == '=>' || $substr == '='){
             for($j = 0; $j < count($mat[$i]); $j++){
                 $mat[$i][$j] *= -1;
                 
