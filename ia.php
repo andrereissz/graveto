@@ -164,7 +164,7 @@ function like($needle, $haystack)
                                 ?>
                                     <div class="col col-auto">
                                         <div style="width: 60px;">
-                                            <input class="num" type="number" name="z<?php echo ($j) ?>" id="z<?php echo ($j) ?>" value="<?php echo $objetivo[$j] ?>">
+                                            <input class="num" type="text" name="z<?php echo ($j) ?>" id="z<?php echo ($j) ?>" value="<?php echo $objetivo[$j] ?>">
                                         </div>
                                     </div>
                                 <?php
@@ -196,7 +196,7 @@ function like($needle, $haystack)
                                     <!-- A partir da quantidade de variáveis, irá apresentar a quantidade de inputs necessários -->
                                     <?php for ($j = 0; $j < $var; $j++) { ?>
                                         <div class="col col-auto">
-                                            <input class="num" type="number" name="v<?php echo ($i . $j) ?>" id="v<?php echo ($i . $j) ?>" value="<?php echo $restricoes[$i][$j] ?>">
+                                            <input class="num" type="text" name="v<?php echo ($i . $j) ?>" id="v<?php echo ($i . $j) ?>" value="<?php echo $restricoes[$i][$j] ?>">
                                         </div>
                                     <?php } ?>
 

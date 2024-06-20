@@ -378,7 +378,7 @@ function findPivot($mat)
     $pivotRow = 0;
 
     for ($j = 0; $j < $col - 1; $j++) { //encontra a coluna pivo
-        if (abs($mat[0][$j]) > $maxCol) {
+        if ($mat[0][$j] < 0 && abs($mat[0][$j]) > $maxCol) {
             $maxCol = abs($mat[0][$j]);
             $pivotCol = $j;
         }
