@@ -4,8 +4,6 @@ $n = $_POST["rest"];
 $m = $_POST["var"];
 $base = [];
 
-
-
 // FUNÇÕES PARA GERAR MATRIZ INICIAL
 
 function mkIdentidade($n)
@@ -120,11 +118,13 @@ function printMat($mat, $iteracao)
 <?php
                         if ($i == 0) {
                             if (round($mat[$i][$j], 2) == 0) {
+                                echo abs(round($mat[$i][$j], 2));
+                            } else{
                                 echo round($mat[$i][$j], 2);
-                            } else {
-                                echo -1 * round($mat[$i][$j], 2);
                             }
-                        } else {
+                        } elseif(round($mat[$i][$j], 2) == 0) {
+                            echo abs(round($mat[$i][$j], 2));
+                        } else{
                             echo round($mat[$i][$j], 2);
                         }
 ?>
@@ -208,11 +208,13 @@ function printMatPivot($mat, $iteracao, $piv)
 <?php
                         if ($i == 0) {
                             if (round($mat[$i][$j], 2) == 0) {
+                                echo abs(round($mat[$i][$j], 2));
+                            } else{
                                 echo round($mat[$i][$j], 2);
-                            } else {
-                                echo -1 * round($mat[$i][$j], 2);
                             }
-                        } else {
+                        } elseif(round($mat[$i][$j], 2) == 0) {
+                            echo abs(round($mat[$i][$j], 2));
+                        } else{
                             echo round($mat[$i][$j], 2);
                         }
 ?>
@@ -281,8 +283,11 @@ function printMatSolved($mat, $iteracao, $piv)
                 }
                 ?>
             </div>
-
+            <form action="inteira.php" method="POST">
+            <input type="hidden" name="z" value="<?php echo intval($mat[0][$col -1]) ?>">
             <?php
+            $variaveis = [];
+            $valores = [];
             for ($i = 0; $i < $lin; $i++) {
             ?> <div class="row row-auto">
                     <div class="col col-auto">
@@ -300,15 +305,17 @@ function printMatSolved($mat, $iteracao, $piv)
                     for ($j = 0; $j < $col; $j++) {
                     ?>
                         <div class="col col-auto">
-                            <input class="form-control my-2" type="text" value="
+                            <input class="form-control my-2" name="v<?php echo $i.$j ?>" type="text" value="
 <?php
                         if ($i == 0) {
                             if (round($mat[$i][$j], 2) == 0) {
+                                echo abs(round($mat[$i][$j], 2));
+                            } else{
                                 echo round($mat[$i][$j], 2);
-                            } else {
-                                echo -1 * round($mat[$i][$j], 2);
                             }
-                        } else {
+                        } elseif(round($mat[$i][$j], 2) == 0) {
+                            echo abs(round($mat[$i][$j], 2));
+                        } else{
                             echo round($mat[$i][$j], 2);
                         }
 ?>
@@ -320,6 +327,18 @@ function printMatSolved($mat, $iteracao, $piv)
 ?>
                         ">
                         </div>
+<?php
+
+                    if($i != 0 && $j == 0 && substr($GLOBALS["base"][$i-1], 0,1) == 'x')
+                        {
+                            array_push($variaveis, 'v'.substr($GLOBALS["base"][$i-1], 1,1))
+                    ?>
+                    <input type="hidden" name="variaveis[<?php $i-1 ?>]" value="<?php echo 'x'.substr($GLOBALS["base"][$i-1], 1,1) ?>"> 
+                    <input type="hidden" name="valores[<?php $i-1 ?>]" value="<?php echo intval($mat[$i][$col-1]) ?>"> 
+<?php
+                    }
+                    
+?>            
                     <?php
                     }
                     ?>
@@ -329,11 +348,10 @@ function printMatSolved($mat, $iteracao, $piv)
             ?>
             <div class="row row-auto">
                 <div class="col w-full align-center">
-                    <form action="graph.php" method="post">
-                        <input type="submit" class="btn btn-success w-25 justify-center " value="Solução Gráfica">
-                    </form>
+                        <input type="submit" class="btn btn-success w-25 justify-center " id="inteira" value="Solução Inteira">
                 </div>
             </div>
+            </form>
         </div>
     </div>
 <?php
