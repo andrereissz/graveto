@@ -24,7 +24,10 @@
                 </div>
                 <div class="card-body">
                     <div class="row mt-2 mb-2 justify-content-center">
-                        <a class="btn btn-graveto" style="font-family: Krona One; width: 70%;" href="problem.php">Inserir Manualmente</a>
+                        <a class="btn btn-graveto" style="font-family: Krona One; width: 70%;" href="problem.php">Simplex Tabular</a>
+                    </div>
+                    <div class="row mt-2 mb-2 justify-content-center">
+                        <a class="btn btn-graveto" style="font-family: Krona One; width: 70%;" href="../Grafic/index.html">Solução Gráfica</a>
                     </div>
                     <div class="row mt-2 mb-2 justify-content-center">
                         <a class="btn btn-graveto" style="font-family: Krona One; width: 70%;" href="prompt.php">Input
