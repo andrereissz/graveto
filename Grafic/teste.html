@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolver Problema Linear com Método Simplex Gráfico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        canvas {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+        #plot {
+            width: 100%;
+            height: 600px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Metodo Simplex Gráfico para Maximização</h1>
+        <div class="form-group">
+            <label for="numConstraints">Número de Restrições:</label>
+            <input type="number" id="numConstraints" placeholder="Digite o número de restrições">
+            <button id="generateFields">Gerar Campos</button>
+        </div>
+        <div id="constraints"></div>
+        <div id="inputFields" style="display: none;">
+            <div class="form-group">
+                <label for="objectiveX1">Coeficiente de x1 na Função Objetivo:</label>
+                <input type="number" id="objectiveX1" placeholder="Coeficiente de x1">
+            </div>
+            <div class="form-group">
+                <label for="objectiveX2">Coeficiente de x2 na Função Objetivo:</label>
+                <input type="number" id="objectiveX2" placeholder="Coeficiente de x2">
+            </div>
+            <button id="solveButton">Resolver</button>
+        </div>
+        <div id="plot"></div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        document.getElementById('generateFields').addEventListener('click', function() {
+            const numConstraints = parseInt(document.getElementById('numConstraints').value);
+            const constraintsDiv = document.getElementById('constraints');
+
+            constraintsDiv.innerHTML = '';  // Limpar restrições anteriores
+
+            for (let i = 0; i < numConstraints; i++) {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <div class="form-group">
+                        <label for="constraint${i + 1}X1">Restrição ${i + 1}:</label>
+                        <input type="number" id="constraint${i + 1}X1" placeholder="Coeficiente de x1">
+                        <label for="constraint${i + 1}X2">x1 + </label>
+                        <input type="number" id="constraint${i + 1}X2" placeholder="Coeficiente de x2">
+                        <label for="constraint${i + 1}B">x2 ≤ </label>
+                        <input type="number" id="constraint${i + 1}B" placeholder="Valor de B">
+                    </div>
+                `;
+                constraintsDiv.appendChild(div);
+            }
+
+            document.getElementById('inputFields').style.display = 'block';
+        });
+
+        document.getElementById('solveButton').addEventListener('click', function() {
+            const numConstraints = parseInt(document.getElementById('numConstraints').value);
+
+            const objective = {
+                x1: parseFloat(document.getElementById('objectiveX1').value),
+                x2: parseFloat(document.getElementById('objectiveX2').value)
+            };
+
+            const constraints = [];
+            for (let i = 0; i < numConstraints; i++) {
+                constraints.push({
+                    x1: parseFloat(document.getElementById(`constraint${i + 1}X1`).value),
+                    x2: parseFloat(document.getElementById(`constraint${i + 1}X2`).value),
+                    b: parseFloat(document.getElementById(`constraint${i + 1}B`).value)
+                });
+            }
+
+            // Adiciona restrições para x >= 0 e y >= 0
+            constraints.push({ x1: 1, x2: 0, b: 0 });  // x >= 0
+            constraints.push({ x1: 0, x2: 1, b: 0 });  // y >= 0
+
+            plotGraph(objective, constraints);
+        });
+
+        function findIntersections(constraints) {
+            const points = [];
+
+            for (let i = 0; i < constraints.length; i++) {
+                for (let j = i + 1; j < constraints.length; j++) {
+                    const A = [
+                        [constraints[i].x1, constraints[i].x2],
+                        [constraints[j].x1, constraints[j].x2]
+                    ];
+                    const B = [constraints[i].b, constraints[j].b];
+
+                    const determinant = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+                    if (determinant !== 0) {
+                        const x = (B[0] * A[1][1] - B[1] * A[0][1]) / determinant;
+                        const y = (A[0][0] * B[1] - A[1][0] * B[0]) / determinant;
+                        if (x >= 0 && y >= 0) { // considerando apenas o quadrante não-negativo
+                            points.push({ x, y });
+                        }
+                    }
+                }
+            }
+
+            // Adicionar interseções com os eixos x e y (x = 0 e y = 0)
+            constraints.forEach(constraint => {
+                if (constraint.x1 !== 0) {
+                    const x = constraint.b / constraint.x1;
+                    if (x >= 0) {
+                        points.push({ x, y: 0 });
+                    }
+                }
+                if (constraint.x2 !== 0) {
+                    const y = constraint.b / constraint.x2;
+                    if (y >= 0) {
+                        points.push({ x: 0, y });
+                    }
+                }
+            });
+
+            return points;
+        }
+
+        function isPointInFeasibleRegion(point, constraints) {
+            return constraints.every(constraint => constraint.x1 * point.x + constraint.x2 * point.y <= constraint.b);
+        }
+
+        function plotGraph(objective, constraints) {
+            const xValues = Array.from({ length: 21 }, (_, i) => i);
+
+            const traces = constraints.map((constraint, index) => {
+                const yValues = xValues.map(x => constraint.x2 !== 0 ? (constraint.b - constraint.x1 * x) / constraint.x2 : constraint.b);
+                const fillArea = {
+                    x: constraint.x2 !== 0 ? [...xValues, xValues[xValues.length - 1], 0, 0] : [constraint.b, constraint.b, 0, 0],
+                    y: constraint.x2 !== 0 ? [...yValues, 0, 0, yValues[0]] : [...xValues, xValues[0], 0, 0],
+                    fill: 'toself',
+                    fillcolor: 'rgba(0,100,80,0.2)',
+                    line: { color: 'transparent' },
+                    type: 'scatter',
+                    showlegend: false,
+                    name: `Área de Restrição ${index + 1}`
+                };
+                return [
+                    {
+                        x: constraint.x2 !== 0 ? xValues : [constraint.b, constraint.b],
+                        y: constraint.x2 !== 0 ? yValues : [0, 20],
+                        mode: 'lines',
+                        name: `Restrição ${index + 1}`
+                    },
+                    fillArea
+                ];
+            }).flat();
