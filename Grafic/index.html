@@ -17,7 +17,7 @@
 
         <a href="../index.php" class="btn position-absolute rounded-circle m-2"
             style="width: 100px; height: 100px; background-image: url('../views/components/btn.png'); background-size: 100% 100%; scale: -1"></a>
-        <div id ='divzona' class="container d-flex flex-grow-1 justify-content-center align-items-center">
+        <div id='divzona' class="container d-flex flex-grow-1 justify-content-center align-items-center">
             <div class="card text-center border-dark">
                 <div class="card-header" style="font-family: Krona One;">
                     Definindo Problema
@@ -51,24 +51,45 @@
             </div>
         </div>
 
-        <div class="container">
+        <div class="container "
+            style="font-family: Krona One; background-color:#FFF3D3; width: 63%; margin: auto; border-radius: 10px; text-align: center; outline:1px solid black; padding: 0px;">
             <form id="inputFields" style="display:none;">
-                <div id="objectiveFunction" >
-                    <h3>Função Objetivo</h3>
+                <div class="card-header " style="font-family: Krona One;">
+                    Definindo Restrições
+                </div>
+                <div id="objectiveFunction" class="card-body "
+                    style="font-family: Krona One;padding-top: 50px; margin: auto; border-radius: 0%;">
+
                     <label for="objectiveZ">Z = </label>
                     <input type="number" id="objectiveX1" placeholder="Coeficiente de x1">
                     <label for="objectiveX1">x1 + </label>
                     <input type="number" id="objectiveX2" placeholder="Coeficiente de x2">
                     <label for="objectiveX2">x2</label>
                 </div>
-                <div id="constraints" >
-                    <h3>Restrições</h3>
+                <div class="card-body" style="border-radius: 0%; margin-bottom: 0px;">
+                    <div id="constraints">
+                        <br>
+                        <h3>Restrições</h3>
+                    </div>
+                    <button type="button" class="btn mt-3 btn-primary" id="solveButton">Resolver</button>
                 </div>
-                <button type="button" id="solveButton">Resolver</button>
-            </form>
 
-            <div id="plot" class="container mt-3 d-flex flex-grow-1 justify-content-center align-items-center"
-                style="display:none;"></div>
+
+            </form>
+            <div id="result" style="display: none; background-color:#FFF3D3; padding-top: 5px; padding-bottom: 5px; margin-bottom: 5px;">
+                <label for="objectiveX1">x1: </label>
+                <input type="number" id="x1*" placeholder="Coeficiente de x1">
+                <label for="objectiveX2">x2:</label>
+                <input type="number" id="x2*" placeholder="Coeficiente de x2">
+                <label for="objectiveX2">z*:</label>
+                <input type="number" id="z*" placeholder="Coeficiente de x2">
+
+            </div>
+            <div id="plot" styles="width = 50px"
+                class="container d-flex flex-grow-1 justify-content-center align-items-center"
+                style="display:none; margin: 0px; padding: 0px;">
+            </div>
+
         </div>
     </div>
     <script src="script.js"></script>

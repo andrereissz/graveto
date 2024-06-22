@@ -93,8 +93,8 @@ function isPointInFeasibleRegion(point, constraints) {
 
 // Função principal para plotar o gráfico
 function plotGraph(objective, constraints) {
-    const xValues = Array.from({ length: 41 }, (_, i) => i); // Valores para x1
-    const yValues = Array.from({ length: 41 }, (_, i) => i); // Valores para x2
+    const xValues = Array.from({ length: 10 }, (_, i) => i); // Valores para x1
+    const yValues = Array.from({ length: 10 }, (_, i) => i); // Valores para x2
 
     // Cálculo dos valores da função objetivo em cada ponto da grade
     const zValues = yValues.map(y =>
@@ -145,13 +145,13 @@ function plotGraph(objective, constraints) {
     };
 
     // Trace dos pontos de interseção
-    // const intersectionPoints = {
-    //     x: feasiblePoints.map(point => point.x),
-    //     y: feasiblePoints.map(point => point.y),
-    //     mode: 'markers',
-    //     name: 'Pontos de Interseção',
-    //     marker: { color: 'red', size: 10 }
-    // };
+    const intersectionPoints = {
+        x: feasiblePoints.map(point => point.x),
+        y: feasiblePoints.map(point => point.y),
+        mode: 'markers',
+        name: 'Pontos de Interseção',
+        marker: { color: 'red', size: 10 }
+    };
 
     // Adicionar todos os traces ao gráfico
     const allTraces = [...traces, optimalPointMarker];
@@ -159,6 +159,8 @@ function plotGraph(objective, constraints) {
     // Criar o gráfico utilizando Plotly
     Plotly.newPlot('plot', allTraces, layout);
     document.getElementById('plot').style.display = 'block';
-
-    console.log('Solução Ótima encontrada em:', optimalPoint);
+    document.getElementById('result').style.display = 'block';
+    document.getElementById(`x1*`).value = (JSON.stringify(optimalPoint.x));
+    document.getElementById(`x2*`).value = (JSON.stringify(optimalPoint.y));
+    document.getElementById(`z*`).value = (JSON.stringify(optimalPoint.z));
 }
